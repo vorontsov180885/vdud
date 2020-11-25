@@ -10,5 +10,4 @@ class user
 {
     public $name;
     public $age;
-
 }

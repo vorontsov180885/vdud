@@ -6,8 +6,10 @@
  * Time: 15:15
  */
 require_once('connection.php');
-require_once('DonateOperation.php');
+require_once('classes/DonateOperation.php');
+require_once ('funtions/vardump.php');
 
+vardump('123213');
 
 function detectPattern($value){
     if (preg_replace('#[0-9]+\s?([0-9]?)+\s.\s#','price',$value) == 'price'){
@@ -62,7 +64,7 @@ foreach (file($filename) as $line_num=>$line){
     }
 }
 
-var_dump($donates[10]);
+vardump($donates);
 echo "<br>";
 
 /*$dbh = null;*/
