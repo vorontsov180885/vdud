@@ -8,6 +8,6 @@
 
 class Project
 {
-    public $id, $name, $description, $required_price,$done_price;
+    public $id, $name, $description, $required_price,$done_price,$link;
 
 }

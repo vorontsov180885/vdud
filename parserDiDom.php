@@ -10,12 +10,20 @@ require_once 'vendor/autoload.php';
 require_once 'classes/Project.php';
 use DiDom\Document;
 
+
 $document = new Document ('https://www.voskreseniye.ru/pogert/',true);
 $projects = $document->find('.leyka-campaign-list-item.has-thumb');
 $i=0;
 foreach ($projects as $item=>$project){
     $ProjectDonate[$i] = new Project();
     $ProjectDonate[$i]->id = $i;
+
+    $links = $project->find('.lk-title a');
+    foreach ($links as $link){
+        $ProjectDonate[$i]->link=$link->attr('href');
+    }
+
+
     $names = $project->find('h4.lk-title');
     foreach ($names as $name){
         $ProjectDonate[$i]->name=$name->text();
@@ -34,6 +42,8 @@ foreach ($projects as $item=>$project){
         $ProjectDonate[$i]->done_price = (float)$prices[0];
         $ProjectDonate[$i]->required_price = (float)$prices[1];
     }
+
+
     $i++;
 }
 
