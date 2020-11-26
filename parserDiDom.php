@@ -24,7 +24,16 @@ foreach ($projects as $item=>$project){
     foreach ($descriptions as $description){
         $ProjectDonate[$i]->description = $description->text();
     }
-
+    $textWithPrices = $project->find('.leyka-scale-label');
+    foreach ($textWithPrices as $textWithPrice){
+        $text = $textWithPrice->text();
+        $str = str_replace(' Собрано ','',$text);
+        $str = str_replace(' ','',$str);
+        $str = str_replace('₽','',$str);
+        $prices = explode('из',$str);
+        $ProjectDonate[$i]->done_price = (float)$prices[0];
+        $ProjectDonate[$i]->required_price = (float)$prices[1];
+    }
     $i++;
 }
 
