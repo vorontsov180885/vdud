@@ -44,54 +44,43 @@ foreach ($projects as $item=>$project){
 /*vardump($ProjectDonate);
 vardump(count($ProjectDonate));*/
 $j=0;
-while ($j<count($ProjectDonate)) {
-    $document = new Document($ProjectDonate[$j]->link, true);
-
-    $donatRows = $document->find('.history__row');
+while ($j<count($ProjectDonate)) { // запускаем цикл по количеству проектов пожертвований
+    $document = new Document($ProjectDonate[$j]->link, true);  // создаем ДиДом документ с содержанием страницы  проекта пожертвования
+    $donatRows = $document->find('.history__row');  // находим в содержании страницы строки с пожертвованием
     $i = 0;
-    foreach ($donatRows as $donatRow) {
-        $Donates[$i] = new DonateOperation();
-        $Donates[$i]->id = $i;
-        $prices = $donatRow->find('.history__cell.h-amount');
-        foreach ($prices as $price) {
+    foreach ($donatRows as $donatRow) {   // пробегаемся по массиву со строками пожертвований
+        $Donates[$i] = new DonateOperation();  // i-ый элемент массива $Donates определяем как объект класса DonateOperation 
+        $Donates[$i]->id = $i;                      //свойству id объекта присваиваем значение $i  
+        $prices = $donatRow->find('.history__cell.h-amount');   //находим содержание с ценой
+        foreach ($prices as $price) {                                     // пробегаемся по строкам с ценами, выделяем флоат и заносим его в свойства price 
             $str = $price->text();
             $str = str_replace(' ', '', $str);
             $str = str_replace('₽', '', $str);
             $str = (float)preg_replace('!\s++!u', '', $str);
             $Donates[$i]->price = $str;
         }
-        $names = $donatRow->find('.history__cell.h-name');
-        foreach ($names as $name) {
+        $names = $donatRow->find('.history__cell.h-name');  // находим содержания с именем жертвователя
+        foreach ($names as $name) {                                   //  пробегаемся по массиву и заносим в свойство объекта $Donates тектовое содержание
             $Donates[$i]->name = $name->text();
         }
-        $dates = $donatRow->find('.history__cell.h-date');
-        foreach ($dates as $date) {
+        $dates = $donatRow->find('.history__cell.h-date');   // находим содержания с датой пожертвования
+        foreach ($dates as $date) {                                    //  заносим даты в свойство объекта $donates
             $Donates[$i]->date = $date->text();
         }
         $i++;
     }
-    $out_array = [];
+    $out_array = [];                                                    // чистим массив с объектами от дублей
     foreach ($Donates as $Donate) {
         $Donate_copy = $Donate;
         unset($Donate_copy->id);
         $key = md5(serialize($Donate_copy));
         $out_array[$key] = $Donate;
     }
-    $Donates = $out_array;
-    $i = 0;
-    $countDonates = count($Donates);
-    $sumDonates = 0;
-    foreach ($Donates as $Donate) {
-        $Donate->id = $countDonates - $i;
-        $sumDonates += $Donate->price;
-        $i++;
-    }
-/*    foreach ($Donates as $Donate){
-        $Donate->project_id =$j;
-       }*/
-    $j++;
-}
+    $Donates = $out_array;                                              // получаем массив с уникальными
+    $j++; }                                                              // переходим к парсингу следующей страницы
 
-vardump($Donates);
+$countDonates = count($Donates);
+vardump($countDonates);
 
+$j=0;
 
