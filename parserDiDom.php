@@ -18,10 +18,13 @@ foreach ($donatRows as $donatRow){
     $Donates[$i] = new DonateOperation();
     $Donates[$i]->id = $i;
     $prices = $donatRow->find('.history__cell.h-amount');
+    /*$prices = $donatRow->count('.history__cell.h-amount');*/
+
     foreach ($prices as $price){
         $str= $price->text();
        $str = str_replace(' ','',$str);
-        $str = (float)str_replace('₽','',$str);
+        $str = str_replace('₽','',$str);
+        $str=(float)preg_replace('!\s++!u', '', $str);
         $Donates[$i]->price = $str;
     }
     $names = $donatRow->find('.history__cell.h-name');
@@ -36,6 +39,8 @@ foreach ($donatRows as $donatRow){
 }
 
 
+
+
 $out_array = [];
 foreach ($Donates as $Donate) {
     $Donate_copy = $Donate;
@@ -47,14 +52,18 @@ $Donates = $out_array;
 
 $i=0;
 $countDonates = count($Donates);
+$sumDonates = 0;
+
 foreach ($Donates as $Donate){
     $Donate->id = $countDonates -$i;
+    $sumDonates+=$Donate->price;
     $i++;
 }
 
+
+vardump($sumDonates);
 vardump($Donates);
 
-die;
 
 $document = new Document ('https://www.voskreseniye.ru/pogert/',true);
 $projects = $document->find('.leyka-campaign-list-item.has-thumb');
@@ -84,9 +93,6 @@ foreach ($projects as $item=>$project){
     foreach ($links as $link){
         $ProjectDonate[$i]->link=$link->attr('href');
     }
-
-
-
     $i++;
 }
 
