@@ -15,37 +15,46 @@ $document = new Document('https://www.voskreseniye.ru/campaign/stroitelstvo-kapi
 $donatRows = $document->find('.history__row');
 $i=0;
 foreach ($donatRows as $donatRow){
-    $Donate[$i] = new DonateOperation();
-    $Donate[$i]->id = $i;
+    $Donates[$i] = new DonateOperation();
+    $Donates[$i]->id = $i;
     $prices = $donatRow->find('.history__cell.h-amount');
     foreach ($prices as $price){
-        $a =$price->text();
-
-        $Donate[$i]->price =$price->text();
+        $str= $price->text();
+       $str = str_replace(' ','',$str);
+        $str = (float)str_replace('₽','',$str);
+        $Donates[$i]->price = $str;
     }
     $names = $donatRow->find('.history__cell.h-name');
     foreach ($names as $name){
-        $Donate[$i]->name =$name->text();
+        $Donates[$i]->name =$name->text();
     }
     $dates = $donatRow->find('.history__cell.h-date');
     foreach ($dates as $date){
-        $Donate[$i]->date =$date->text();
+        $Donates[$i]->date = $date->text();
     }
     $i++;
 }
-echo $i;
-
-vardump($Donate[0]);
 
 
+$out_array = [];
+foreach ($Donates as $Donate) {
+    $Donate_copy = $Donate;
+    unset($Donate_copy->id);
+    $key = md5(serialize($Donate_copy));
+    $out_array[$key] =$Donate;
+}
+$Donates = $out_array;
 
+$i=0;
+$countDonates = count($Donates);
+foreach ($Donates as $Donate){
+    $Donate->id = $countDonates -$i;
+    $i++;
+}
+
+vardump($Donates);
 
 die;
-
-
-//vardump($Donate);
-
-
 
 $document = new Document ('https://www.voskreseniye.ru/pogert/',true);
 $projects = $document->find('.leyka-campaign-list-item.has-thumb');
