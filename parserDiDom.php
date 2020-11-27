@@ -53,17 +53,14 @@ $Donates = $out_array;
 $i=0;
 $countDonates = count($Donates);
 $sumDonates = 0;
-
 foreach ($Donates as $Donate){
     $Donate->id = $countDonates -$i;
     $sumDonates+=$Donate->price;
     $i++;
 }
 
-
 vardump($sumDonates);
 vardump($Donates);
-
 
 $document = new Document ('https://www.voskreseniye.ru/pogert/',true);
 $projects = $document->find('.leyka-campaign-list-item.has-thumb');
