@@ -8,5 +8,5 @@
 
 class DonateOperation
 {
-    public $id,$price, $name, $date ;
+    public $project_id,$id,$price, $name, $date ;
 }
