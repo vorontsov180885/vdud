@@ -43,45 +43,60 @@ foreach ($projects as $item=>$project){
 }
 
 
-$j=2;
-$link = $ProjectDonate[$j]->link;
-$document = new Document($link, true);  // создаем ДиДом документ с содержанием страницы  проекта пожертвования
-$donatRows = $document->find('.history__row');  // находим в содержании страницы строки с пожертвованием
-$i = 0;
-foreach ($donatRows as $donatRow) {   // пробегаемся по массиву со строками пожертвований
-    $Donates[$i] = new DonateOperation();  // i-ый элемент массива $Donates определяем как объект класса DonateOperation
-    $prices = $donatRow->find('.history__cell.h-amount');   //находим содержание с ценой
-    foreach ($prices as $price) {                                     // пробегаемся по строкам с ценами, выделяем флоат и заносим его в свойства price
-        $str = $price->text();
-        $str = str_replace(' ', '', $str);
-        $str = str_replace('₽', '', $str);
-        $str = (float)preg_replace('!\s++!u', '', $str);
-        $Donates[$i]->price = $str;
+$j=0;
+
+while ($j<count($ProjectDonate)) {
+    $link = $ProjectDonate[$j]->link;
+    $document = new Document($link, true);  // создаем ДиДом документ с содержанием страницы  проекта пожертвования
+    $donatRows = $document->find('.history__row');  // находим в содержании страницы строки с пожертвованием
+    $i = 0;
+    foreach ($donatRows as $donatRow) {   // пробегаемся по массиву со строками пожертвований
+        $Donates[$i] = new DonateOperation();  // i-ый элемент массива $Donates определяем как объект класса DonateOperation
+        $prices = $donatRow->find('.history__cell.h-amount');   //находим содержание с ценой
+        foreach ($prices as $price) {                                     // пробегаемся по строкам с ценами, выделяем флоат и заносим его в свойства price
+            $str = $price->text();
+            $str = str_replace(' ', '', $str);
+            $str = str_replace('₽', '', $str);
+            $str = (float)preg_replace('!\s++!u', '', $str);
+            $Donates[$i]->price = $str;
+        }
+        $names = $donatRow->find('.history__cell.h-name');  // находим содержания с именем жертвователя
+        foreach ($names as $name) {                                   //  пробегаемся по массиву и заносим в свойство объекта $Donates тектовое содержание
+            $Donates[$i]->name = $name->text();
+        }
+        $dates = $donatRow->find('.history__cell.h-date');   // находим содержания с датой пожертвования
+        foreach ($dates as $date) {                                    //  заносим даты в свойство объекта $donates
+            $Donates[$i]->date = $date->text();
+        }
+        $Donates[$i]->id = $i;
+        $i++;
     }
-    $names = $donatRow->find('.history__cell.h-name');  // находим содержания с именем жертвователя
-    foreach ($names as $name) {                                   //  пробегаемся по массиву и заносим в свойство объекта $Donates тектовое содержание
-        $Donates[$i]->name = $name->text();
+
+    // получаем уникальные элементы массива
+    if ($j == 0) {
+        $countDonates = count($Donates);
+        for ($i = 0; $i < $countDonates / 2; $i++) {
+            if (($Donates[$i]->price === $Donates[$countDonates / 2 + $i]->price) and ($Donates[$i]->name === $Donates[$countDonates / 2 + $i]->name) and ($Donates[$i]->date === $Donates[$countDonates / 2 + $i]->date)) {
+                unset ($Donates[$countDonates / 2 + $i]);
+            }
+        }
+
     }
-    $dates = $donatRow->find('.history__cell.h-date');   // находим содержания с датой пожертвования
-    foreach ($dates as $date) {                                    //  заносим даты в свойство объекта $donates
-        $Donates[$i]->date = $date->text();
+    for ($i = 0; $i < count($Donates); $i++) {
+        $Donates[$i]->project_id = $j;
     }
-    $Donates[$i]->id = $i;
-    $i++;
+    $DonatesOperations[$j] = $Donates;
+    unset($Donates);
+    $j++;
 }
-$countDonates = count($Donates);
-
-// получаем уникальные элементы массива
-for ($i=0;$i<$countDonates/2;$i++){
-    if (($Donates[$i]->price === $Donates[$countDonates/2+$i]->price)and ($Donates[$i]->name === $Donates[$countDonates/2+$i]->name) and ($Donates[$i]->date === $Donates[$countDonates/2+$i]->date)){
-        unset ($Donates[$countDonates/2+$i]);
-    }
-}
+vardump($DonatesOperations);
+//vardump(count($DonatesOperations));
 
 
 
 
-vardump($Donates);
+
+
 
 
 
