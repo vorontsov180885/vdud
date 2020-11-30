@@ -73,7 +73,7 @@ while ($j<count($ProjectDonates)) {
 
 
 
-            
+
         }
         $Donates[$i]->id = $i;
         $i++;
