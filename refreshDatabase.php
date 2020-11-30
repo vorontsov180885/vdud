@@ -5,6 +5,8 @@
  * Date: 26.11.2020
  * Time: 8:06
  */
+
+$start = microtime(true);
 require_once 'funtions/vardump.php';
 require_once 'vendor/autoload.php';
 require_once 'classes/Project.php';
@@ -42,7 +44,7 @@ foreach ($projects as $item=>$project){
     $i++;
 }
 
-vardump($ProjectDonates);
+
 $j=0;
 while ($j<count($ProjectDonates)) {
     $link = $ProjectDonates[$j]->link;
@@ -101,16 +103,23 @@ try{
     die();
 }
 
-
-
-
 foreach ($ProjectDonates as $projectDonate) {
     $sql1 = "INSERT into projects (id,name,description,required_price,done_price,link) values ('$projectDonate->id','$projectDonate->name','$projectDonate->description','$projectDonate->required_price','$projectDonate->done_price','$projectDonate->link')";
     $dbh->query($sql1);
 }
 
+foreach ($DonatesOperations as $donatesOperation){
+    foreach ($donatesOperation as $donateOperation){
+        $sql2 = "INSERT into donates (project_id,id,price,name,date) values ('$donateOperation->project_id','$donateOperation->id','$donateOperation->price','$donateOperation->name','$donateOperation->date')";
+        $dbh->query($sql2);
+    }
+}
 
 
+$finish = microtime(true);
 
+$delta = $finish - $start;
+
+echo $delta . ' сек.';
 
 
