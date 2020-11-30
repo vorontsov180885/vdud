@@ -108,6 +108,7 @@ foreach ($ProjectDonates as $projectDonate) {
     $dbh->query($sql1);
 }
 
+vardump($DonatesOperations);
 foreach ($DonatesOperations as $donatesOperation){
     foreach ($donatesOperation as $donateOperation){
         $sql2 = "INSERT into donates (project_id,id,price,name,date) values ('$donateOperation->project_id','$donateOperation->id','$donateOperation->price','$donateOperation->name','$donateOperation->date')";
@@ -115,11 +116,8 @@ foreach ($DonatesOperations as $donatesOperation){
     }
 }
 
-
 $finish = microtime(true);
-
 $delta = $finish - $start;
-
 echo $delta . ' сек.';
 
 

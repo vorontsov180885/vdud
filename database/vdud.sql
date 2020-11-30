@@ -13,39 +13,31 @@
 
 
 -- Дамп структуры базы данных vdud
-CREATE DATABASE IF NOT EXISTS `vdud` ;
+CREATE DATABASE IF NOT EXISTS `vdud` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `vdud`;
 
--- Дамп структуры для таблица vdud.donats
-CREATE TABLE IF NOT EXISTS `donats` (
-  `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
-  `project_id` int unsigned DEFAULT NULL,
+-- Дамп структуры для таблица vdud.donates
+CREATE TABLE IF NOT EXISTS `donates` (
+  `project_id` int DEFAULT NULL,
+  `id` int DEFAULT NULL,
+  `price` float(12,0) DEFAULT NULL,
   `name` text,
-  `date` date DEFAULT NULL,
-  `price` float DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+  `date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Дамп данных таблицы vdud.donats: ~0 rows (приблизительно)
-/*!40000 ALTER TABLE `donats` DISABLE KEYS */;
-/*!40000 ALTER TABLE `donats` ENABLE KEYS */;
+-- Экспортируемые данные не выделены.
 
 -- Дамп структуры для таблица vdud.projects
 CREATE TABLE IF NOT EXISTS `projects` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` text,
+  `id` int DEFAULT NULL,
+  `name` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `description` text,
   `required_price` float DEFAULT NULL,
   `done_price` float DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
+  `link` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Дамп данных таблицы vdud.projects: ~0 rows (приблизительно)
-/*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` (`id`, `name`, `required_price`, `done_price`) VALUES
-	(1, 'Сбор средств на первую цель', 111, 42),
-	(2, 'Сбор средств на вторую цель', 222, 54),
-	(3, 'Сбор средств на третью цель', 333, 61);
-/*!40000 ALTER TABLE `projects` ENABLE KEYS */;
+-- Экспортируемые данные не выделены.
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
