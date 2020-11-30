@@ -8,4 +8,3 @@
 $dsn='mysql:host=localhost;dbname=vdud';
 $user='root';
 $pass='root';
-$filename='txtfiles/vdud3.txt';
