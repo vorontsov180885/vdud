@@ -68,6 +68,12 @@ while ($j<count($ProjectDonates)) {
         $dates = $donatRow->find('.history__cell.h-date');   // находим содержания с датой пожертвования
         foreach ($dates as $date) {                                    //  заносим даты в свойство объекта $donates
             $Donates[$i]->date = $date->text();
+            $Donates[$i]->date = date_create_from_format('j.m.Y', $Donates[$i]->date);
+            $Donates[$i]->date =  date_format($Donates[$i]->date, 'Y-m-d');
+
+
+
+            
         }
         $Donates[$i]->id = $i;
         $i++;
@@ -90,7 +96,7 @@ while ($j<count($ProjectDonates)) {
     $j++;
 }
 
-// vardump($DonatesOperations);
+
 // получили 2 массива: $ProjectDonates и $DonatesOperations
 
 // научимся записывать значения в базу данных
