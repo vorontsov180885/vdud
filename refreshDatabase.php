@@ -5,7 +5,6 @@
  * Date: 26.11.2020
  * Time: 8:06
  */
-
 $start = microtime(true);
 require_once 'funtions/vardump.php';
 require_once 'vendor/autoload.php';
@@ -43,8 +42,6 @@ foreach ($projects as $item=>$project){
     }
     $i++;
 }
-
-
 $j=0;
 while ($j<count($ProjectDonates)) {
     $link = $ProjectDonates[$j]->link;
@@ -70,15 +67,10 @@ while ($j<count($ProjectDonates)) {
             $Donates[$i]->date = $date->text();
             $Donates[$i]->date = date_create_from_format('j.m.Y', $Donates[$i]->date);
             $Donates[$i]->date =  date_format($Donates[$i]->date, 'Y-m-d');
-
-
-
-
         }
         $Donates[$i]->id = $i;
         $i++;
     }
-
     // получаем уникальные элементы массива
     if ($j == 0) {
         $countDonates = count($Donates);
@@ -95,12 +87,7 @@ while ($j<count($ProjectDonates)) {
     unset($Donates);
     $j++;
 }
-
-
-// получили 2 массива: $ProjectDonates и $DonatesOperations
-
-// научимся записывать значения в базу данных
-
+//внесем данные в БД
 require_once 'connection.php';
 try{
     $dbh = new PDO($dsn,$user,$pass);
@@ -109,11 +96,19 @@ try{
     die();
 }
 
+
+// очистим таблицы в БД перед загрузкой значений, полученных в результате парсинга
+$sql = 'TRUNCATE TABLE projects;';
+$dbh->query($sql);
+$sql = 'TRUNCATE TABLE donates;';
+$dbh->query($sql);
+
+
+
 foreach ($ProjectDonates as $projectDonate) {
     $sql1 = "INSERT into projects (id,name,description,required_price,done_price,link) values ('$projectDonate->id','$projectDonate->name','$projectDonate->description','$projectDonate->required_price','$projectDonate->done_price','$projectDonate->link')";
     $dbh->query($sql1);
 }
-
 vardump($DonatesOperations);
 foreach ($DonatesOperations as $donatesOperation){
     foreach ($donatesOperation as $donateOperation){
@@ -121,9 +116,6 @@ foreach ($DonatesOperations as $donatesOperation){
         $dbh->query($sql2);
     }
 }
-
 $finish = microtime(true);
 $delta = $finish - $start;
 echo $delta . ' сек.';
-
-
