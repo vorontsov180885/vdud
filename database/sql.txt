@@ -1,12 +1,11 @@
--- общие сборы ночлежки после фильма Дудя
+1-- общие сборы ночлежки после фильма Дудя
 SELECT SUM(donates.price), COUNT(donates.price),ROUND(SUM(donates.price)/COUNT(donates.price),2) AS averange  FROM donates WHERE (donates.`date`>='2020-11-16');
 
---  общие сборы ночлежки после фильма Дудя в разрезе проектов
+2--  общие сборы ночлежки после фильма Дудя в разрезе проектов
+SELECT projects.`name` AS 'name', SUM(donates.price) AS 'sum', COUNT(donates.price) AS 'count' FROM donates,projects WHERE ((donates.`date`>='2020-11-16')AND(projects.id=donates.project_id)) GROUP BY projects.`name`;
 
-SELECT projects.`name` as name, SUM(donates.price) as sum, COUNT(donates.price) as count FROM donates,projects WHERE ((donates.`date`>='2020-11-16')AND(projects.id=donates.project_id)) GROUP BY projects.`name`;
+3-- смотрим динамику пожертвований чуть до и после фильма Дудя
+SELECT DATE_FORMAT(donates.`date`, '%d.%m.%Y') AS 'date', SUM(donates.price) AS 'sum',COUNT(donates.price) AS 'count',ROUND(SUM(donates.price)/COUNT(donates.price),2) AS 'averange' FROM donates WHERE donates.`date`>'2020-10-01' GROUP BY donates.`date` order BY donates.`date`;
 
--- смотрим динамику пожертвований чуть до и после фильма Дудя
-SELECT donates.`date`, SUM(donates.price),COUNT(donates.price),ROUND(SUM(donates.price)/COUNT(donates.price),2) AS averange FROM donates WHERE donates.`date`>'2020-10-01' GROUP BY donates.`date` order BY donates.`date`;
-
--- максимальные пожертвования
-SELECT donates.`name`, sum(donates.price) FROM donates WHERE (donates.price>=50000) GROUP BY donates.`name` ORDER BY sum(donates.price) desc;
+4-- максимальные пожертвования
+SELECT donates.`name` AS 'name', sum(donates.price) AS 'sum' FROM donates WHERE (donates.price>=50000) GROUP BY donates.`name` ORDER BY sum(donates.price) desc;
