@@ -6,10 +6,10 @@
  * Time: 8:06
  */
 $start = microtime(true);
-require_once 'funtions/vardump.php';
-require_once 'vendor/autoload.php';
-require_once 'classes/Project.php';
-require_once 'classes/DonateOperation.php';
+require_once '../funtions/vardump.php';
+require_once '../vendor/autoload.php';
+require_once '../classes/Project.php';
+require_once '../classes/DonateOperation.php';
 use DiDom\Document;
 
 $document = new Document ('https://www.voskreseniye.ru/pogert/',true);
@@ -88,7 +88,7 @@ while ($j<count($ProjectDonates)) {
     $j++;
 }
 //внесем данные в БД
-require_once 'connection.php';
+require_once '../funtions/connection.php';
 try{
     $dbh = new PDO($dsn,$user,$pass);
 } catch (PDOException $e){

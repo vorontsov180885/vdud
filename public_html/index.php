@@ -29,8 +29,8 @@
 -->
 
 <?php
-require_once 'connection.php';
-require_once 'funtions/vardump.php';
+require_once '../funtions/connection.php';
+require_once '../funtions/vardump.php';
 
 try{
     $dbh = new PDO($dsn,$user,$pass);
